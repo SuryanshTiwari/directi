@@ -15,7 +15,7 @@ public:
     string getId(){return Id;}
 };
 
-class Item : public Base{
+class Item : public Base{   
 private:
     int itemQuantity;
     double itemPrice;
@@ -75,7 +75,7 @@ int main(int argc, char const *argv[])
     Item item1;
     item1.setName("mobile");
     item1.setId("44");
-     
+
     harsh.buyItem(item1);
 
     Item item2;
