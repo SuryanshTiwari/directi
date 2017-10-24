@@ -1,3 +1,5 @@
+
+// https://www.topcoder.com/community/data-science/data-science-tutorials/range-minimum-query-and-lowest-common-ancestor/#Lowest%20Common%20Ancestor%20(LCA)
 #include "bits/stdc++.h"
 using namespace std;
  
