@@ -1,56 +1,38 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <functional>
-#include <utility>
-
+#include "bits/stdc++.h"
 using namespace std;
-const int MAX = 1e4 + 5;
-typedef pair<long long, int> PII;
-bool marked[MAX];
-vector <PII> adj[MAX];
 
-long long prim(int x)
+int main(int argc, char const *argv[])
 {
-    priority_queue<PII, vector<PII>, greater<PII> > Q;
-    int y;
-    long long minimumCost = 0;
-    PII p;
-    Q.push(make_pair(0, x));
-    while(!Q.empty())
-    {
-        // Select the edge with minimum weight
-        p = Q.top();
-        Q.pop();
-        x = p.second;
-        // Checking for cycle
-        if(marked[x] == true)
-            continue;
-        minimumCost += p.first;
-        marked[x] = true;
-        for(int i = 0;i < adj[x].size();++i)
-        {
-            y = adj[x][i].second;
-            if(marked[y] == false)
-                Q.push(adj[x][i]);
+    int n, m;
+    cin >> n >> m;
+
+    vector<pair<int, int> > v[n+1];
+    for(int i = 0; i < m; i++){
+        int x, y, z;
+        cin >> x >> y >> z;
+        v[x].push_back(make_pair(y, z));
+        v[y].push_back(make_pair(x, z));
+    }
+
+    priority_queue<pair<int, int> , vector<pair<int, int> > , greater<pair<int, int> > > q;
+
+    vector<int> key(n+1, INT_MAX);
+    int visited[n+1];
+    memset(visited, 0, sizeof visited);
+    q.push(make_pair(0, 1));
+    while(!q.empty()){
+        pair<int, int> top = q.top();
+        q.pop();
+        visited[top.second] = 1;
+        for(int i = 0; i < v[top.second].size(); i++){
+            if(visited[v[top.second][i].first] == 0 && key[v[top.second][i].first] > v[top.second][i].second){
+                key[v[top.second][i].first] = v[top.second][i].second;
+                q.push(make_pair(key[v[top.second][i].first], v[top.second][i].first));
+            }
         }
     }
-    return minimumCost;
-}
-
-int main()
-{
-    int nodes, edges, x, y;
-    long long weight, minimumCost;
-    cin >> nodes >> edges;
-    for(int i = 0;i < edges;++i)
-    {
-        cin >> x >> y >> weight;
-        adj[x].push_back(make_pair(weight, y));
-        adj[y].push_back(make_pair(weight, x));
-    }
-    // Selecting 1 as the starting node
-    minimumCost = prim(1);
-    cout << minimumCost << endl;
+    for(int i = 1; i <= n; i++){
+        cout << key[i] << " ";
+    }   
     return 0;
 }

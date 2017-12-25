@@ -1,41 +1,37 @@
 #include "bits/stdc++.h"
 using namespace std;
-#define  pii pair<int, int>
-bool visited[10000];
-int dist[10000];
+
 int main(int argc, char const *argv[])
 {
-    priority_queue<pii, vector<pii> , greater<pii> >  q;
-    int V = 9;
-    int graph[9][9] = {{0, 4, 0, 0, 0, 0, 0, 8, 0},
-                      {4, 0, 8, 0, 0, 0, 0, 11, 0},
-                      {0, 8, 0, 7, 0, 4, 0, 0, 2},
-                      {0, 0, 7, 0, 9, 14, 0, 0, 0},
-                      {0, 0, 0, 9, 0, 10, 0, 0, 0},
-                      {0, 0, 4, 14, 10, 0, 2, 0, 0},
-                      {0, 0, 0, 0, 0, 2, 0, 1, 6},
-                      {8, 11, 0, 0, 0, 0, 1, 0, 7},
-                      {0, 0, 2, 0, 0, 0, 6, 7, 0}
-                     };
+    int n, m;
+    cin >> n >> m;
+    vector<pair<int, int> > v[n+1];
+    for(int i = 0; i < m; i++){
     
-    for(int i = 1; i < 1000; i++)dist[i] = INT_MAX;
+        int x, y, z;
+        cin >> x >> y >> z;
+        v[x].push_back(make_pair(y, z));
+        v[y].push_back(make_pair(x, z));
+    }
 
-    q.push(make_pair(0, 0));
+    priority_queue<pair<int, int> , vector<pair<int, int> >, greater<pair<int, int> > > q;
+    vector<int> d(n+1, INT_MAX);
+    q.push(make_pair(0, 1)); 
+    // int d[n+1];
+    // memset(d, 0, sizeof d);
+    d[1] = 0;
     while(!q.empty()){
-        pii temp = q.top();
+        pair<int, int> top = q.top();
         q.pop();
-        int node = temp.second;//cout << node << " ";
-        for(int i = 0; i < V; i++){
-            if(graph[node][i] != 0){
-                if(dist[i] > dist[node] + graph[node][i]){
-                    dist[i] = dist[node] + graph[node][i];
-                    q.push(make_pair(dist[i],i));
-                }
+        for(int i = 0; i < v[top.second].size(); i++){
+            if(d[v[top.second][i].first] > d[top.second] + v[top.second][i].second){
+                d[v[top.second][i].first] = d[top.second] + v[top.second][i].second;
+                q.push(make_pair(d[v[top.second][i].first], v[top.second][i].first));
             }
         }
     }
-
-    for(int i = 0; i < V; i++)
-        cout << dist[i] << " ";
+    for(int i = 1; i <= n; i++){
+        cout << d[i] << " "; 
+    }
     return 0;
 }
